@@ -449,6 +449,24 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	// Heta 2025 03 10 - lineomatic static
+	$('#success_msg').hide();
+	$('#error_msg').hide();
+	let searchParams = new URLSearchParams(window.location.search);
+	if (searchParams.has('success')) {
+		$('#success_msg').show();
+
+		setTimeout(function () {
+			$('#success_msg').hide();
+		}, 30000);
+	} else if (searchParams.has('error')) {
+		$('#error_msg').show();
+
+		setTimeout(function () {
+			$('#error_msg').hide();
+		}, 30000);
+	}
 });
 
 // Heta 2024 01 23 Popup
