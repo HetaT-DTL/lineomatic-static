@@ -683,12 +683,21 @@
                     </div>
                 </div>
 			<div class="contact-left">
+				<div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #155724;    background-color: #d4edda;    border-color: #c3e6cb;"
+				id="success_msg">
+				Your message submitted successfully.
+				</div>
+				<div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #fff; background-color: #ff0000;    border-color: #c3e6cb; display: none;"
+				id="error_msg">
+				Something went wrong, Please try again!
+				</div>
     <div class="form-header">
     <h4 class="form-title">Connect With Us</h4>
     </div>
     
     <div class="contactleft-wrap">
-    <form class="contact-form" id="contact-form" method="POST" action="https://www.lineomatic.com/contactus_action.php">
+    <form class="contact-form" id="contact-form" method="POST" action="../action/contactus_action.php">
+	<input type="hidden" name="redirect_url" value="https://www.lineomatic.com/contact-us">
     <div class="form-in name"><input aria-required="true" name="name" placeholder="Name" type="text" /></div>
     
     <div class="form-in companyname"><input aria-required="true" name="company_name" placeholder="Company Name" type="text" /></div>

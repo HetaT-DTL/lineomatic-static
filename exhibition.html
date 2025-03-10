@@ -204,11 +204,20 @@
 </div>
  
     <div class="lom_exhi_page_form">
+					<div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #155724;    background-color: #d4edda;    border-color: #c3e6cb;"
+                        id="success_msg">
+						Thank you for sharing your details. We'll update you with the details of the event soon
+                    </div>
+                    <div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #fff; background-color: #ff0000;    border-color: #c3e6cb; display: none;"
+                        id="error_msg">
+                        Something went wrong, Please try again!
+                    </div>
 					  <div class="people-and-culture">
 						<h2 class="section-title">Pre Registration</h2>
 					  </div>
 					  <div class="applicant-personal-detail-form">
-                        <form id="career" class="applicant-form" method="POST" action="exhibition_action.php">
+                        <form id="career" class="applicant-form" method="POST" action="../action/exhibition_action.php">
+							<input type="hidden" name="redirect_url" value="https://www.lineomatic.com/exhibition">
 						   	<div class="form-box">
 								<div class="full-col">
 						   			<h3>Company Detail</h3>	

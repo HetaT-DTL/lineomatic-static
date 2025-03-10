@@ -192,9 +192,13 @@
             </div>
             
             <div class="applicant-personal-detail-form">
-                                <div class="job-post-details">
-                    <div class="full-col">
-                        <h3>Current Opening</h3>	
+                    <div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #155724;    background-color: #d4edda;    border-color: #c3e6cb;"
+                        id="success_msg">
+                        Your application submitted successfully.
+                    </div>
+                    <div style="position: relative;    padding: .75rem 1.25rem;    margin-bottom: 1rem;    border: 1px solid transparent;    border-radius: .25rem;    color: #fff; background-color: #ff0000;    border-color: #c3e6cb; display: none;"
+                        id="error_msg">
+                        Something went wrong, Please try again!
                     </div>
                     <div class="full-col job-post-table" style="overflow-x:auto;margin-bottom: 10px;">
                         <table id="job-posts-data">
@@ -322,14 +326,15 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
                     
                                         </div>
 
-                <form id="career" class="applicant-form" method="POST" action="career_action.php" enctype="multipart/form-data">
+                <form id="career" class="applicant-form" method="POST" action="../action/career_action.php" enctype="multipart/form-data">
+                    <input type="hidden" name="redirect_url" value="https://www.lineomatic.com/career">
                     <div class="form-box">
                         <div class="full-col">
                             <h3>Applicant Personal Detail</h3>	
                         </div>
                         <div class="form-input-box select-option full-col">
                             <label>Apply For:<span class="req">*</span></label>
-                            <select name="job_post" id="job_post_select_box" placeholder="" required="true">
+                            <select name="job_post" id="job_post_select_box" placeholder="" rew="true">
                                 <option value="0">Generic</option>
                                                                     <option value="6">Hiring Female Candidates</option>
                                                             </select>
@@ -337,30 +342,30 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
                         <div class="form-input-box">
                             <label class="p-lr-10">Full Name:<span class="req">*</span></label>
                             <div class="half-col">
-                                <input type="text" name="fname" placeholder="First Name" class="" required="true">   
+                                <input type="text" name="fname" placeholder="First Name" class="" rew="true">   
                             </div>
                             <div class="half-col">
-                                <input type="text" name="lname" placeholder="Last Name" class="" required="true">
+                                <input type="text" name="lname" placeholder="Last Name" class="" rew="true">
                             </div>
                         </div>
                         <div class="form-input-box full-col">
                             <label>Address:<span class="req">*</span></label>
-                            <textarea placeholder="" name="address" required="true"></textarea>
+                            <textarea placeholder="" name="address" rew="true"></textarea>
                         </div>
                         <div class="form-input-box">
                             <div class="third-col">
-                                <input type="text" placeholder="City" name="city" class="" required="true">
+                                <input type="text" placeholder="City" name="city" class="" rew="true">
                             </div>
                             <div class="third-col">
-                                <input type="text" placeholder="State" name="state" class="" required="true">
+                                <input type="text" placeholder="State" name="state" class="" rew="true">
                             </div>
                             <div class="third-col">
-                                <input type="text" placeholder="Zip" name="zip" maxlength="6" class="" required="true">
+                                <input type="text" placeholder="Zip" name="zip" maxlength="6" class="" rew="true">
                             </div>
                         </div>
                         <div class="form-input-box select-option full-col">
                             <label>Country:<span class="req">*</span></label>
-                            <select name="country" placeholder="" required="true">
+                            <select name="country" placeholder="" rew="true">
                                 <option value=""></option>
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Albania">Albania</option>
@@ -607,70 +612,70 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
                         </div>
                         <div class="form-input-box full-col">
                             <label>Mobile Number:<span class="req">*</span></label>
-                            <input type="text" name="mobile" required="true">
+                            <input type="text" name="mobile" rew="true">
                         </div>	
                         <div class="form-input-box full-col">
                             <label>Email:<span class="req">*</span></label>
-                            <input type="text" name="email" required="true">
+                            <input type="text" name="email" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Birth Date:<span class="req">*</span></label>
-                            <input type="date" name="dob" placeholder="Birth Date" required="true">
+                            <input type="date" name="dob" placeholder="Birth Date" rew="true">
                         </div>
                         <div class="full-col">
                             <h3>Applicant Job Details</h3>	
                         </div>
                         <div class="form-input-box full-col">
                             <label>Present Company:<span class="req">*</span></label>
-                            <input type="text" name="present_company" required="true">
+                            <input type="text" name="present_company" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Present Job Location:<span class="req">*</span></label>
-                            <input type="text" name="present_job_location" required="true">
+                            <input type="text" name="present_job_location" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Present Job Description / Role Responsibilities:<span class="req">*</span></label>
-                            <input type="text" name="present_job_description" required="true">
+                            <input type="text" name="present_job_description" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Notice Period:<span class="req">*</span></label>
-                            <input type="number" name="notice_period" required="true">
+                            <input type="number" name="notice_period" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Present Designation:<span class="req">*</span></label>
-                            <input type="text" name="present_designation" required="true">
+                            <input type="text" name="present_designation" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Qualification:<span class="req">*</span></label>
-                            <input type="text" name="qualification" required="true">
+                            <input type="text" name="qualification" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Total exp in Yrs:<span class="req">*</span></label>
-                            <input type="text" name="t_exp" required="true">
+                            <input type="text" name="t_exp" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Present CTC:<span class="req">*</span></label>
-                            <input type="text" name="p_ctc" placeholder="Per Annum" required="true">
+                            <input type="text" name="p_ctc" placeholder="Per Annum" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Post Apply For:<span class="req">*</span></label>
-                            <input type="text" name="post_apply" required="true">
+                            <input type="text" name="post_apply" rew="true">
                         </div>
                         <div class="form-input-box full-col">
                             <label>Expected CTC:<span class="req">*</span></label>
-                            <input type="text" name="e_ctc" placeholder="Per Annum" required="true">
+                            <input type="text" name="e_ctc" placeholder="Per Annum" rew="true">
                         </div>
                         <div class="full-col">
                             <h3>Upload</h3>	
                         </div>
                         <div class="form-input-box full-col">
                             <label>Recent Photograph:<span class="req">*</span></label>
-                            <input type="file" name="image" required="true">
+                            <input type="file" name="image">
                             <span>Photograph size Max 512 Kb.</span>
                         </div>
                         <div class="form-input-box full-col">
                             <label>Resume:<span class="req">*</span></label>
-                            <input type="file" name="resume" required="true">
+                            <input type="file" name="resume" >
                             <span>Resume in "pdf", "doc", "docx format & size Max 5 Mb. </span>
                         </div>
                         <div class="full-col">
@@ -755,8 +760,8 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
     <nav class="nav-menu"></nav>
 </div>
 <!-- Popups -->
-<form id="request-quote-form" class="request-form mfp-hide" method="POST" action="https://www.lineomatic.com/machinequote_action.php">
-    <input type="hidden" name="redirect_url" value="https://www.lineomatic.com/career">
+<form id="request-quote-form" class="request-form mfp-hide" method="POST" action="..https://www.lineomatic.com/action/request_quote_action.php">
+    <input type="hidden" name="redirect_url" value="https://www.lineomatic.com/machine">
         <h3>Request a Quote</h3>
     <div class="form-box">
         <div class="form-input-box">
@@ -785,8 +790,8 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
         </div>
     </div>
 </form>
-<form id="brochure-requst" class="request-form mfp-hide" method="POST" action="https://www.lineomatic.com/machinequote_action.php" >
-    <input type="hidden" name="redirect_url" value="https://www.lineomatic.com/career">
+<form id="brochure-requst" class="request-form mfp-hide" method="POST" action="../action/brochure_action.php" >
+    <input type="hidden" name="redirect_url" value="https://www.lineomatic.com/machine">
     <br />
 <b>Notice</b>:  Undefined index: product in <b>/data/sites/www.lineomatic.com/htdocs/front/inc/footer_3.php</b> on line <b>131</b><br />
         
@@ -903,26 +908,26 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
             ignore: "input[type='textarea']:hidden",
             rules: {
                 name:{
-                    required: true,  
+                    rew: true,  
                 },
                 email: {
-                    required: true,  
+                    rew: true,  
                     email: true              
                 }, 
                 phone: {
-                    required: true,  
+                    rew: true,  
                 }, 
                 state: {
-                    required: true,            
+                    rew: true,            
                 }, 
                 country: {
-                    required: true,          
+                    rew: true,          
                 }, 
                 message: {
-                    required: true,  
+                    rew: true,  
                 },	
                 'g-recaptcha-response': {
-                    required: true,  
+                    rew: true,  
                 },
                 	
             },
@@ -936,26 +941,26 @@ D/62, Diamond Park, G.I.D.C. Naroda, Opp. Toyato Show Room, N.H. No. 8, Naroda, 
             ignore: "input[type='textarea']:hidden",
             rules: {
                 name:{
-                    required: true,  
+                    rew: true,  
                 },
                 email: {
-                    required: true,  
+                    rew: true,  
                     email: true              
                 }, 
                 phone: {
-                    required: true,  
+                    rew: true,  
                 }, 
                 state: {
-                    required: true,            
+                    rew: true,            
                 }, 
                 country: {
-                    required: true,          
+                    rew: true,          
                 }, 
                 message: {
-                    required: true,  
+                    rew: true,  
                 },	
                 'g-recaptcha-response': {
-                    required: true,  
+                    rew: true,  
                 },		
             },
             submitHandler: function(form) {
