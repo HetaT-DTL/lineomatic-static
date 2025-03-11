@@ -1,0 +1,48 @@
+=============================================
+Name: Heta Maam
+Company Name: Company
+Address: Naroda
+Contact Number: 1234567892
+Email: test@gmail.com
+State: Gujarat
+Country: India
+Department: Marketing
+Message: "Hello How Can I Help You?"
+=============================================
+
+=============================================
+Name: Heta Maam
+Company Name: Company
+Address: New Naroda
+Contact Number: 1234567892
+Email: test@gmail.com
+State: Gujarat
+Country: Bahrain
+Department: Customer Support
+Message: "Hello How Can I Help You?"
+=============================================
+
+=============================================
+Name: Heta Maam
+Company Name: Company
+Address: New Naroda
+Contact Number: 1234567892
+Email: test@gmail.com
+State: Gujarat
+Country: Bahrain
+Department: Customer Support
+Message: "Hello How Can I Help You?"
+=============================================
+
+=============================================
+Name: Heta Maam
+Company Name: Company
+Address: New Naroda
+Contact Number: 1234567892
+Email: test@gmail.com
+State: Gujarat
+Country: Bahrain
+Department: Customer Support
+Message: "Hello How Can I Help You?"
+=============================================
+

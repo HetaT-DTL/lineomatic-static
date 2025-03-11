@@ -46,14 +46,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $data .= "Message: \"" . $message . "\"\n";
         $data .= "=============================================\n\n";
       
-        $file = "exhibition_details.txt";
+        $file = "text-files/exhibition_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
        
         $_SESSION['success_msg'] = "Your message submitted successfully.";
+        header("Location: " . $_POST['redirect_url'] . "?success=1");
     }
    
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
+    header("Location: " . $_POST['redirect_url'] . "?error=1");
 }
 
 function senatize_post_input($data, $type) {
