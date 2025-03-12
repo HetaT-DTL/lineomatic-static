@@ -1,7 +1,7 @@
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
-   
+
     $job_post = senatize_post_input($_POST['job_post'], 'string');
     $fname = senatize_post_input(($_POST['fname']), 'string');
     $lname = senatize_post_input(($_POST['lname']), 'string');
@@ -27,32 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $e_ctc = senatize_post_input($_POST['e_ctc'], 'number');
     $message = senatize_post_input($_POST['message'], 'varchar');
 
-   
 
-    if (empty($job_post) && 
-    empty($fname) &&
-    empty($lname) &&
-    empty($address) &&
-    empty($city) &&
-    empty($state) &&
-    empty($zip) &&
-    empty($country) &&
-    empty($p_code) &&
-    empty($phone) &&
-    empty($mobile) &&
-    empty($email) &&
-    empty($dob) &&
-    empty($present_company) &&
-    empty($present_job_location) &&
-    empty($present_job_description) &&
-    empty($notice_period) &&
-    empty($present_designation) &&
-    empty($qualification) &&
-    empty($t_exp) &&
-    empty($p_ctc) &&
-    empty($post_apply) &&
-    empty($e_ctc) &&
-    empty($message)) {
+
+    if ( empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
 
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
@@ -82,20 +59,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $data .= "Expected CTC: " . $e_ctc . "\n";
         $data .= "Message: \"" . $message . "\"\n";
         $data .= "=============================================\n\n";
-      
+
         $file = "text-files/career_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
-       
+
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1");
     }
-   
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
     header("Location: " . $_POST['redirect_url'] . "?error=1");
 }
 
-function senatize_post_input($data, $type) {
+function senatize_post_input($data, $type)
+{
     if ($type == 'string' || $type == 'number') {
         $data = trim($data);
         $data = preg_replace('/[$&+,:;=?@#|<>.^*()%!]/', ' ', $data);
@@ -104,6 +81,5 @@ function senatize_post_input($data, $type) {
         $data = trim($data);
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
-    } 
+    }
 }
-?>
