@@ -452,10 +452,18 @@ $(document).ready(function () {
 
 	// Heta 2025 03 10 - lineomatic static
 	$('#success_msg').hide();
+	$('#request_a_quote_success_msg').hide();
+	$('#broucher_success_msg').hide();
 	$('#error_msg').hide();
 	let searchParams = new URLSearchParams(window.location.search);
 	if (searchParams.has('success')) {
-		$('#success_msg').show();
+		if (searchParams.has('m') && (searchParams.get('m') === "db")) {
+			$('#broucher_success_msg').show();
+		} else if (searchParams.has('m') && (searchParams.get('m') === "raq")) {
+			$('#request_a_quote_success_msg').show();
+		} else {
+			$('#success_msg').show();
+		}
 
 		setTimeout(function () {
 			$('#success_msg').hide();

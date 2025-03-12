@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         file_put_contents($file, $data, FILE_APPEND);
        
         $_SESSION['success_msg'] = "Your message submitted successfully.";
-        header("Location: " . $_POST['redirect_url'] . "?success=1");
+        header("Location: " . $_POST['redirect_url'] . "?success=1&m=db");
 
     }
    
