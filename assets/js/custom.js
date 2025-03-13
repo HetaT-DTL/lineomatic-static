@@ -450,6 +450,7 @@ $(document).ready(function () {
 		});
 	});
 
+
 	// Heta 2025 03 10 - lineomatic static
 	$('#success_msg').hide();
 	$('#request_a_quote_success_msg').hide();
@@ -459,15 +460,33 @@ $(document).ready(function () {
 	if (searchParams.has('success')) {
 		if (searchParams.has('m') && (searchParams.get('m') === "db")) {
 			$('#broucher_success_msg').show();
+			var dLink = $("input[name='dLink']").val();
+			if (dLink) {
+				var link = document.createElement('a');
+				link.href = dLink;
+				link.target = '_blank';
+				link.download = dLink;
+				link.dispatchEvent(new MouseEvent('click'));
+				
+				// window.open(dLink);
+			}
+			setTimeout(function () {
+				$('#broucher_success_msg').hide();
+			}, 30000);
 		} else if (searchParams.has('m') && (searchParams.get('m') === "raq")) {
 			$('#request_a_quote_success_msg').show();
+
+			setTimeout(function () {
+				$('#request_a_quote_success_msg').hide();
+			}, 30000);
 		} else {
 			$('#success_msg').show();
+
+			setTimeout(function () {
+				$('#success_msg').hide();
+			}, 30000);
 		}
 
-		setTimeout(function () {
-			$('#success_msg').hide();
-		}, 30000);
 	} else if (searchParams.has('error')) {
 		$('#error_msg').show();
 
