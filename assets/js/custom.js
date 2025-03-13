@@ -440,14 +440,14 @@ $(document).ready(function () {
 		$('.endProducts-btn').removeClass('active');
 		$(this).addClass('active');
 
-		$.ajax({
-			url: '/getEndProducts.php?id=' + endprodId,
-			type: "GET",
-			success: function (response) {
-				$('.endProducts').html(response);
-				// You will get response from your PHP page (what you echo or print)
-			}
-		});
+		// $.ajax({
+		// 	url: '/getEndProducts.php?id=' + endprodId,
+		// 	type: "GET",
+		// 	success: function (response) {
+		// 		$('.endProducts').html(response);
+		// 		// You will get response from your PHP page (what you echo or print)
+		// 	}
+		// });
 	});
 
 
