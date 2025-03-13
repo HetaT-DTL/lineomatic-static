@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($exhibition) && empty($company_name) && empty($first_name) && empty($last_name) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($code) && empty($phone) && empty($mobile) && empty($email) && empty($date) && empty($interested_products) && empty($message) ) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
-        $data = "=============================================\n";
+        $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
         $data .= "Exhibition: " . $exhibition . "\n";
         $data .= "Company Name: " . $company_name . "\n";
         $data .= "First Name: " . $first_name . "\n";

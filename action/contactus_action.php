@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($name) && empty($company_name) && empty( $address) && empty($contact_number) && empty($email) && empty($state) && empty($country) && empty($department) && empty( $message)) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
-        $data = "=============================================\n";
+        $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
         $data .= "Name: " . $name . "\n";
         $data .= "Company Name: " . $company_name . "\n";
         $data .= "Address: " . $address . "\n";

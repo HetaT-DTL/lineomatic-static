@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
-        $data = "=============================================\n";
+        $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
         $data .= "Job Post: " . $job_post . "\n";
         $data .= "First Name: " . $fname . "\n";
         $data .= "Last Name: " . $lname . "\n";

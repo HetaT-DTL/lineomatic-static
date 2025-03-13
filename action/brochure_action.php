@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $phone = senatize_post_input($_POST['phone'], 'number');
     $state = senatize_post_input($_POST['state'], 'string');
     $country = senatize_post_input($_POST['country'], 'string');
+    $pName = senatize_post_input($_POST['pName'], 'varchar');
     $message = senatize_post_input($_POST['message'], 'varchar');
 
   
@@ -15,7 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($name) &&  empty( $email) && empty($phone) && empty($state) && empty($address) && empty($country) && empty($message)) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
-        $data = "=============================================\n";
+        $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
+        $data .= "Product Name: \"" . $pName . "\"\n";
         $data .= "Name: " . $name . "\n";
         $data .= "Email: " . $email . "\n";
         $data .= "Phone: " . $phone . "\n";
