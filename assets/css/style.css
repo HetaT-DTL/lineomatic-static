@@ -2485,9 +2485,14 @@ body.nav-open #page::before {
 	background: #fff;
 }
 
-.video-popup .mfp-content,
-.mfp-image-holder .mfp-content {
+.video-popup .mfp-content {
 	max-width: 700px;
+	width: 95%;
+	background-color: #FFF;
+	padding: 15px;
+}
+
+.mfp-image-holder .mfp-content {
 	width: 95%;
 	background-color: #FFF;
 	padding: 15px;
@@ -6188,4 +6193,18 @@ div.machine-range-box__item:last-child {
 	.location_item p:last-child {
 		padding-left: 0px;
 	}
+}
+
+/* .media-item-wrap .media-iimg-g {
+    display: none;
+}
+ 
+.media-item-wrap .media-iimg-g:first-child {
+    display: block;
+} */
+ 
+.mfp-counter {
+    top: 43px;
+    color: #ffffff;
+    font-size: 15px;
 }

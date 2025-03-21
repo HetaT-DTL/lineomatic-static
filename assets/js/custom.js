@@ -185,6 +185,25 @@ $('.gallery-popup-img').magnificPopup({
 	}
 });
 
+jQuery(document).ready(function ($) {
+    $(".media-item-wrap").each(function (i, e) {
+        var gallery_img_item = $(e).find('.media-iimg-g a');
+ 
+        $(gallery_img_item).magnificPopup({
+            type: 'image',
+            mainClass: 'mfp-with-zoom',
+            gallery: {
+                enabled: true
+            },
+            zoom: {
+                enabled: true,
+                duration: 300,
+                easing: 'ease-in-out',
+            },
+        });
+    });
+});
+
 
 $("#career").validate({
 	rules: {
