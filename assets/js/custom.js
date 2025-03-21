@@ -202,6 +202,11 @@ jQuery(document).ready(function ($) {
             },
         });
     });
+
+	jQuery(".media-icontent .mread-more").on("click", function (e) {
+		e.preventDefault();
+		$('.first-img').trigger('click');
+	});
 });
 
 
