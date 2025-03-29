@@ -1,6 +1,8 @@
 <?php
+include('mailer.php');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
-   
+
     $name = senatize_post_input($_POST['name'], 'string');
     $company_name = senatize_post_input(($_POST['company_name']), 'string');
     $address = senatize_post_input($_POST['address'], 'varchar');
@@ -13,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     $errors = [];
 
-    if (empty($name) && empty($company_name) && empty( $address) && empty($contact_number) && empty($email) && empty($state) && empty($country) && empty($department) && empty( $message)) {
+    if (empty($name) && empty($company_name) && empty($address) && empty($contact_number) && empty($email) && empty($state) && empty($country) && empty($department) && empty($message)) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
         $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
@@ -27,20 +29,92 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $data .= "Department: " . $department . "\n";
         $data .= "Message: \"" . $message . "\"\n";
         $data .= "=============================================\n\n";
-      
+
         $file = "text-files/contactus_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
-       
-        $_SESSION['success_msg'] = "Your message submitted successfully.";
-        header("Location: " . $_POST['redirect_url'] . "?success=1");
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+                        <br>
+                        <br>
+
+                        Hello Admin!<br><br> 
+                        <table border=1>
+                            <tr>
+                                <td>Name
+                                </td>
+                                <td>' . $name . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Company
+                                </td>
+                                <td>' . $company_name . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Address
+                                </td>
+                                <td>' . $address . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Contact
+                                </td>
+                                <td>' . $contact_number . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email
+                                </td>
+                                <td>' . $email . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>State
+                                </td>
+                                <td>' . $state . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Country
+                                </td>
+                                <td>' . $country . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subject
+                                </td>
+                                <td>' . $subject . '
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Subject
+                                </td>
+                                <td>' . $message . '
+                                </td>
+                            </tr>
+                        </table> 
+                        <br><br>
+                        Team<br>
+                        Lineomatic';
+        $mail = sendMailSMTP('Thanks for contacting lineomatic', 'info@lineomatic.com', $bodyHTML);
+        // $mail = sendMailSMTP('Thanks for contacting lineomatic', $email, $bodyHTML);
+
+        if (!isset($mail['error'])) {
+            $_SESSION['success_msg'] = "Your message submitted successfully.";
+            header("Location: " . $_POST['redirect_url'] . "?success=1");
+        } else {
+            $_SESSION['error_msg'] = "Something went to wrong, please try again.";
+            header("Location: " . $_POST['redirect_url'] . "?error=1");
+        }
     }
-   
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
     header("Location: " . $_POST['redirect_url'] . "?error=1");
 }
 
-function senatize_post_input($data, $type) {
+function senatize_post_input($data, $type)
+{
     if ($type == 'string' || $type == 'number') {
         $data = trim($data);
         $data = preg_replace('/[$&+,:;=?@#|<>.^*()%!]/', ' ', $data);
@@ -49,6 +123,5 @@ function senatize_post_input($data, $type) {
         $data = trim($data);
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
-    } 
+    }
 }
-?>
