@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                 <tr>
                     <td>Interested Products
                     </td>
-                    <td>' . implode(', ', json_decode($interested_products, true)) . '
+                    <td>' . $interested_products . '
                     </td>
                 </tr>
                 
