@@ -1,5 +1,142 @@
 <?php
+$bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+<br>
+<br>
 
+Hello <table order=1>
+    <tr>
+            <td>Name
+            </td>
+            <td>' . $_POST['fname'] . " " . $_POST['lname'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Address
+            </td>
+            <td>' . $_POST['address'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>City
+            </td>
+            <td>' . $_POST['city'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>State
+            </td>
+            <td>' . $_POST['state'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Zip
+            </td>
+            <td>' . $_POST['zip'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Country
+            </td>
+            <td>' . $_POST['country'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Phone Number
+            </td>
+            <td>' . $_POST['p_code'] . " " . $_POST['phone'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Mobile
+            </td>
+            <td>' . $_POST['mobile'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Email
+            </td>
+            <td>' . $_POST['email'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Birth Date
+            </td>
+            <td>' . $_POST['dob'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Present Company
+            </td>
+            <td>' . $_POST['present_company'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Present Designation
+            </td>
+            <td>' . $_POST['present_designation'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Qualification
+            </td>
+            <td>' . $_POST['qualification'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Total exp in Yrs
+            </td>
+            <td>' . $_POST['t_exp'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Present CTC
+            </td>
+            <td>' . $_POST['p_ctc'] . '
+            </td>
+        </tr>
+        <tr>
+            <td>Post Apply For
+            </td>
+            <td>' . $_POST['post_apply'] . '
+            </td>
+        </tr>
+        <tr>
+        <td>Expected CTC
+        </td>
+        <td>' . $_POST['e_ctc'] . '
+        </td>
+    </tr>
+    <tr>
+        <td>Recent Photograph
+        </td>
+        <td><a href="' . str_replace('+', ' ', $photoUrl) . '">Photo</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Resume
+        </td>
+        <td><a href="' . str_replace('+', ' ', $resumeUrl) . '">Resume</a>
+        </td>
+    </tr>
+    <tr>
+        <td>Message
+        </td>
+        <td>' . $_POST['message'] . '
+        </td>
+    </tr>
+        
+</table>
+!<br><br>
+
+Thank you for showing trust in us.<br><br>
+
+We\'ll follow up on this shortly.<br><br>
+
+Team<br>
+Lineomatic
+';
+echo $bodyHTML;
+exit;
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     $job_post = senatize_post_input($_POST['job_post'], 'string');
@@ -29,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
 
 
-    if ( empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
+    if (empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
 
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
@@ -62,6 +199,91 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
         $file = "text-files/career_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello Admin!<br><br>
+                
+            <table border=1>
+                <tr>
+                    <td>Name
+                    </td>
+                    <td>' . $_POST['name'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Company
+                    </td>
+                    <td>' . $_POST['company_name'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Address
+                    </td>
+                    <td>' . $_POST['address'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Contact
+                    </td>
+                    <td>' . $_POST['contact_number'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email
+                    </td>
+                    <td>' . $_POST['email'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>State
+                    </td>
+                    <td>' . $state . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Country
+                    </td>
+                    <td>' . $country . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Subject
+                    </td>
+                    <td>' . $_POST['subject'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Subject
+                    </td>
+                    <td>' . $_POST['message'] . '
+                    </td>
+                </tr>
+            </table>
+            <br><br>
+            Team<br>
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP('Contact us form submitted | lineomatic', 'info@lineomatic.com', $bodyHTML);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello ' . $_POST['fname'] . " " . $_POST['lname'] . '!<br><br>
+                
+            Thank you for showing trust in us.<br><br>
+                
+            We\'ll follow up on this shortly.<br><br>
+                
+            Team<br> 
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP('Thank you for pre-registring your visit', $_POST['email'], $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1");

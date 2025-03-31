@@ -29,6 +29,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $file = "text-files/request_quote_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
 
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello Admin!<br><br>
+                
+            <table order=1>
+                <tr>
+                    <td>Machine
+                    </td>
+                    <td>' . $pName . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name
+                    </td>
+                    <td>' . $_POST['name'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email
+                    </td>
+                    <td>' . $_POST['email'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone
+                    </td>
+                    <td>' . $_POST['phone'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>State
+                    </td>
+                    <td>' . $_POST['state'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Country
+                    </td>
+                    <td>' . $_POST['country'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Message
+                    </td>
+                    <td>' . $_POST['message'] . '
+                    </td>
+                </tr>
+            </table>
+            <br><br>
+            Team<br>
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP($_POST['name'] . ' has inquired for ' . $pName, $data['email'], $bodyHTML);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello ' . $_POST['name'] . '!<br><br>
+                
+            Thank you for requesting a quote for ' . $pName . '.<br><br>
+                
+            We will get back to you soon with the machine details on your e-mail. <br><br>
+                
+            Team<br>
+            Lineomatic
+            ';
+
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1&m=raq");
     }
