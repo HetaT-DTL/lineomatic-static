@@ -2,7 +2,7 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     // echo "<pre>";print($_POST['name']);exit;
 
-   
+
     $name = senatize_post_input($_POST['name'], 'string');
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
     $phone = senatize_post_input($_POST['phone'], 'number');
@@ -11,9 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $pName = senatize_post_input($_POST['pName'], 'varchar');
     $message = senatize_post_input($_POST['message'], 'varchar');
 
-  
 
-    if (empty($name) &&  empty( $email) && empty($phone) && empty($state) && empty($address) && empty($country) && empty($message)) {
+
+    if (empty($name) &&  empty($email) && empty($phone) && empty($state) && empty($address) && empty($country) && empty($message)) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
         $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
@@ -25,22 +25,93 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $data .= "Country: " . $country . "\n";
         $data .= "Message: \"" . $message . "\"\n";
         $data .= "=============================================\n\n";
-      
+
         $file = "text-files/brochure_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
-       
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello Admin!<br><br>
+                
+            <table order=1>
+                <tr>
+                    <td>Machine
+                    </td>
+                    <td>' . $pName . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name
+                    </td>
+                    <td>' . $_POST['name'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email
+                    </td>
+                    <td>' . $_POST['email'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Phone
+                    </td>
+                    <td>' . $_POST['phone'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>State
+                    </td>
+                    <td>' . $_POST['state'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Country
+                    </td>
+                    <td>' . $_POST['country'] . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Message
+                    </td>
+                    <td>' . $_POST['message'] . '
+                    </td>
+                </tr>
+            </table>
+            <br><br>
+            Team<br>
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP('Brochure Downloaded from ' . $pName, 'info@lineomatic.com', $bodyHTML);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello ' . $_POST['name'] . '!<br><br>
+                
+            Thank you for showing interest in ' . $_POST['pName'] . '.<br><br>
+                
+            Here is a link for you to download the brochure. <a href="' . $_POST['dLink'] . '" target="_blank"> ' . $_POST['dLink'] . '</a><br><br>
+                
+            Team<br>
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP('Thanks for downloading Brochure for ' . $pName, $_POST['email'], $bodyHTML);
+
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1&m=db");
-
     }
-   
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
     header("Location: " . $_POST['redirect_url'] . "?error=1");
-
 }
 
-function senatize_post_input($data, $type) {
+function senatize_post_input($data, $type)
+{
     if ($type == 'string' || $type == 'number') {
         $data = trim($data);
         $data = preg_replace('/[$&+,:;=?@#|<>.^*()%!]/', ' ', $data);
@@ -49,6 +120,5 @@ function senatize_post_input($data, $type) {
         $data = trim($data);
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
-    } 
+    }
 }
-?>
