@@ -97,8 +97,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                         <br><br>
                         Team<br>
                         Lineomatic';
-        $mail = sendMailSMTP('Thanks for contacting lineomatic', 'info@lineomatic.com', $bodyHTML);
-        // $mail = sendMailSMTP('Thanks for contacting lineomatic', $email, $bodyHTML);
+        $mail = sendMailSMTP('Contact us form submitted | lineomatic', 'info@lineomatic.com', $bodyHTML);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+
+            Hello ' . $name . '!<br><br>
+
+            Thank you for showing interest in lineomatic. <br><br>
+
+            We will get back to you as soon as we can.<br><br>
+
+            Team<br>
+            Lineomatic
+            ';
+        $mail = sendMailSMTP('Thanks for contacting lineomatic', $email, $bodyHTML);
 
         if (!isset($mail['error'])) {
             $_SESSION['success_msg'] = "Your message submitted successfully.";

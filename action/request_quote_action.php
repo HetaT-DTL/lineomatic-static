@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+include('mailer.php');
 
 // echo "<pre>"; print_r($_POST); exit;
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         $file = "text-files/request_quote_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
 
+        // Admin email
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
             <br>
             <br>
@@ -45,37 +46,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                 <tr>
                     <td>Name
                     </td>
-                    <td>' . $_POST['name'] . '
+                    <td>' . $name . '
                     </td>
                 </tr>
                 <tr>
                     <td>Email
                     </td>
-                    <td>' . $_POST['email'] . '
+                    <td>' . $email . '
                     </td>
                 </tr>
                 <tr>
                     <td>Phone
                     </td>
-                    <td>' . $_POST['phone'] . '
+                    <td>' . $phone . '
                     </td>
                 </tr>
                 <tr>
                     <td>State
                     </td>
-                    <td>' . $_POST['state'] . '
+                    <td>' . $state . '
                     </td>
                 </tr>
                 <tr>
                     <td>Country
                     </td>
-                    <td>' . $_POST['country'] . '
+                    <td>' . $country . '
                     </td>
                 </tr>
                 <tr>
                     <td>Message
                     </td>
-                    <td>' . $_POST['message'] . '
+                    <td>' . $message . '
                     </td>
                 </tr>
             </table>
@@ -84,13 +85,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Lineomatic
             ';
 
-        $mail = sendMailSMTP($_POST['name'] . ' has inquired for ' . $pName, $data['email'], $bodyHTML);
+        $mail = sendMailSMTP($name . ' has inquired for ' . $pName, "info@lineomatic.com", $bodyHTML);
 
+        // Customer mail
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
             <br>
             <br>
                 
-            Hello ' . $_POST['name'] . '!<br><br>
+            Hello ' . $name . '!<br><br>
                 
             Thank you for requesting a quote for ' . $pName . '.<br><br>
                 
@@ -99,6 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Team<br>
             Lineomatic
             ';
+        $mail = sendMailSMTP('Thank for inquiring ' . $pName, $email, $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1&m=raq");

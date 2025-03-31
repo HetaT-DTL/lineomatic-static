@@ -1,4 +1,6 @@
 <?php
+include('mailer.php');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     // echo "<pre>";print($_POST['name']);exit;
 
@@ -59,79 +61,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                 <tr>
                     <td>Exhibition
                     </td>
-                    <td>' . $_POST['exhibition'] . '
+                    <td>' . $exhibition . '
                     </td>
                 </tr>
                 <tr>
                     <td>Company Name
                     </td>
-                    <td>' . $_POST['company_name'] . '
+                    <td>' . $company_name . '
                     </td>
                 </tr>
                 <tr>
                     <td>Name
                     </td>
-                    <td>' . $_POST['first_name'] . " " . $_POST['last_name'] . '
+                    <td>' . $first_name . " " . $last_name . '
                     </td>
                 </tr>
                 <tr>
                     <td>Address
                     </td>
-                    <td>' . $_POST['address'] . '
+                    <td>' . $address . '
                     </td>
                 </tr>
                 <tr>
                     <td>City
                     </td>
-                    <td>' . $_POST['city'] . '
+                    <td>' . $city . '
                     </td>
                 </tr>
                 <tr>
                     <td>State
                     </td>
-                    <td>' . $_POST['state'] . '
+                    <td>' . $state . '
                     </td>
                 </tr>
                 <tr>
                     <td>Zip
                     </td>
-                    <td>' . $_POST['zip'] . '
+                    <td>' . $zip . '
                     </td>
                 </tr>
                 <tr>
                     <td>Country
                     </td>
-                    <td>' . $_POST['country'] . '
+                    <td>' . $country . '
                     </td>
                 </tr>
                 <tr>
                     <td>Phone Number
                     </td>
-                    <td>' . $_POST['code'] . " " . $_POST['phone'] . '
+                    <td>' . $code . " " . $phone . '
                     </td>
                 </tr>
                 <tr>
                     <td>Mobile
                     </td>
-                    <td>' . $_POST['mobile'] . '
+                    <td>' . $mobile . '
                     </td>
                 </tr>
                 <tr>
                     <td>Email
                     </td>
-                    <td>' . $_POST['email'] . '
+                    <td>' . $email . '
                     </td>
                 </tr>
                 <tr>
                     <td>Date
                     </td>
-                    <td>' . $_POST['date'] . '
+                    <td>' . $date . '
                     </td>
                 </tr>
                 <tr>
                     <td>Interested Products
                     </td>
-                    <td>' . implode(', ', json_decode($_POST['interested_products'], true)) . '
+                    <td>' . implode(', ', json_decode($interested_products, true)) . '
                     </td>
                 </tr>
                 
@@ -146,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             <br>
             <br>
                 
-            Hello ' . $_POST['first_name'] . " " . $_POST['last_name'] . '!<br><br>
+            Hello ' . $first_name . " " . $last_name . '!<br><br>
                 
             Thank you for pre-registring your visit.<br><br>
                 
@@ -155,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Team<br>
             Lineomatic
             ';
-        $mail = sendMailSMTP('Thank you for pre-registring your visit', $_POST['email'], $bodyHTML);
+        $mail = sendMailSMTP('Thank you for pre-registring your visit', $email, $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1");

@@ -1,10 +1,13 @@
 <?php
+include('mailer.php');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     // echo "<pre>";print($_POST['name']);exit;
 
 
     $name = senatize_post_input($_POST['name'], 'string');
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
+    $dLink = filter_var(trim($_POST['dLink']), FILTER_VALIDATE_URL);
     $phone = senatize_post_input($_POST['phone'], 'number');
     $state = senatize_post_input($_POST['state'], 'string');
     $country = senatize_post_input($_POST['country'], 'string');
@@ -45,37 +48,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                 <tr>
                     <td>Name
                     </td>
-                    <td>' . $_POST['name'] . '
+                    <td>' . $name . '
                     </td>
                 </tr>
                 <tr>
                     <td>Email
                     </td>
-                    <td>' . $_POST['email'] . '
+                    <td>' . $email . '
                     </td>
                 </tr>
                 <tr>
                     <td>Phone
                     </td>
-                    <td>' . $_POST['phone'] . '
+                    <td>' . $phone . '
                     </td>
                 </tr>
                 <tr>
                     <td>State
                     </td>
-                    <td>' . $_POST['state'] . '
+                    <td>' . $state . '
                     </td>
                 </tr>
                 <tr>
                     <td>Country
                     </td>
-                    <td>' . $_POST['country'] . '
+                    <td>' . $country . '
                     </td>
                 </tr>
                 <tr>
                     <td>Message
                     </td>
-                    <td>' . $_POST['message'] . '
+                    <td>' . $message . '
                     </td>
                 </tr>
             </table>
@@ -90,17 +93,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             <br>
             <br>
                 
-            Hello ' . $_POST['name'] . '!<br><br>
+            Hello ' . $name . '!<br><br>
                 
-            Thank you for showing interest in ' . $_POST['pName'] . '.<br><br>
+            Thank you for showing interest in ' . $pName . '.<br><br>
                 
-            Here is a link for you to download the brochure. <a href="' . $_POST['dLink'] . '" target="_blank"> ' . $_POST['dLink'] . '</a><br><br>
+            Here is a link for you to download the brochure. <a href="' . $dLink . '" target="_blank"> ' . $dLink . '</a><br><br>
                 
             Team<br>
             Lineomatic
             ';
 
-        $mail = sendMailSMTP('Thanks for downloading Brochure for ' . $pName, $_POST['email'], $bodyHTML);
+        $mail = sendMailSMTP('Thanks for downloading Brochure for ' . $pName, $email, $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1&m=db");
