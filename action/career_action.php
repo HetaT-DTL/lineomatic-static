@@ -1,4 +1,5 @@
 <?php
+include('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
@@ -29,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
 
 
-    if ( empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
+    if (empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
 
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
@@ -62,6 +63,157 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
         $file = "text-files/career_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+
+            Hello Admin!<br><br>
+
+            <table order=1>
+                <tr>
+                        <td>Name
+                        </td>
+                        <td>' . $fname . " " . $lname . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address
+                        </td>
+                        <td>' . $address . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>City
+                        </td>
+                        <td>' . $city . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>State
+                        </td>
+                        <td>' . $state . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Zip
+                        </td>
+                        <td>' . $zip . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Country
+                        </td>
+                        <td>' . $country . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Phone Number
+                        </td>
+                        <td>' . $p_code . " " . $phone . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mobile
+                        </td>
+                        <td>' . $mobile . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email
+                        </td>
+                        <td>' . $email . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Birth Date
+                        </td>
+                        <td>' . $dob . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Present Company
+                        </td>
+                        <td>' . $present_company . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Present Designation
+                        </td>
+                        <td>' . $present_designation . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Qualification
+                        </td>
+                        <td>' . $qualification . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total exp in Yrs
+                        </td>
+                        <td>' . $t_exp . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Present CTC
+                        </td>
+                        <td>' . $p_ctc . '
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Post Apply For
+                        </td>
+                        <td>' . $post_apply . '
+                        </td>
+                    </tr>
+                    <tr>
+                    <td>Expected CTC
+                    </td>
+                    <td>' . $e_ctc . '
+                    </td>
+                </tr>
+                <tr>
+                    <td>Recent Photograph
+                    </td>
+                    <td><a href="' . str_replace('+', ' ', $photoUrl) . '">Photo</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Resume
+                    </td>
+                    <td><a href="' . str_replace('+', ' ', $resumeUrl) . '">Resume</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Message
+                    </td>
+                    <td>' . $message . '
+                    </td>
+                </tr>
+
+            </table>
+            <br><br>
+            Team<br>
+            Lineomatic';
+
+        $mail = sendMailSMTP('New career request', 'info@lineomatic.com', $bodyHTML); 
+
+        $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
+            <br>
+            <br>
+                
+            Hello ' . $fname . " " . $lname . '!<br><br>
+                
+            Thank you for showing trust in us.<br><br>
+                
+            We\'ll follow up on this shortly.<br><br>
+                
+            Team<br> 
+            Lineomatic
+            ';
+
+        $mail = sendMailSMTP('Thank you for pre-registring your visit', $email, $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1");
