@@ -4,9 +4,12 @@ include('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
-    if (!isset($_POST['g-recaptcha-response'])) {
+    if (!isset($_POST['g-recaptcha-response']) && empty($_POST['g-recaptcha-response'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - Request a quote -' . '[recaptcha g-recaptcha-response not set >>]' . print_r($responseKeys, true), FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
+
     $captcha = $_POST['g-recaptcha-response'];
     $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
     $ip = $_SERVER['REMOTE_ADDR'];
@@ -14,12 +17,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
     $response = file_get_contents($url);
     $responseKeys = json_decode($response, true);
+
+    // echo "<pre>";print_r($responseKeys);exit;
     // should return JSON with success as true
-    if ($responseKeys["success"]) {
-        // echo '<h2>Thanks for posting comment</h2>';
-    } else {
+
+    if (isset($responseKeys['error-codes']) && !empty($responseKeys['error-codes'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - Request a quote -' . '[recaptcha error-codes set >>]' . print_r($responseKeys, true), FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
+
+    $recaptchaSecretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
+    $recaptchaResponse = $_POST['g-recaptcha-response'];
+
+    if (validateRecaptcha($recaptchaResponse, $recaptchaSecretKey) === 0) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - Request a quote -' . '[recaptcha validateRecaptcha >>]' . print_r($responseKeys, true), FILE_APPEND);
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
+    }
+
 
     $name = senatize_post_input($_POST['name'], 'string');
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
@@ -32,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($name) && empty($email) && empty($phone) && empty($state) && empty($address) && empty($country) && empty($message)) {
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
-        $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
+        $data = "==================== Date: " . date('d-m-Y H:i A') . " =========================\n";
         $data .= "Product Name: \"" . $pName . "\"\n";
         $data .= "Name: " . $name . "\n";
         $data .= "Email: " . $email . "\n";
@@ -101,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Lineomatic
             ';
 
-        $mail = sendMailSMTP($name . ' has inquired for ' . $pName, "info@lineomatic.com", $bodyHTML);
+        // $mail = sendMailSMTP($name . ' has inquired for ' . $pName, "info@lineomatic.com", $bodyHTML);
 
         // Customer mail
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
@@ -117,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Team<br>
             Lineomatic
             ';
-        $mail = sendMailSMTP('Thank for inquiring ' . $pName, $email, $bodyHTML);
+        // $mail = sendMailSMTP('Thank for inquiring ' . $pName, $email, $bodyHTML);
 
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1&m=raq");
@@ -138,4 +154,31 @@ function senatize_post_input($data, $type)
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
     }
+}
+
+function validateRecaptcha($recaptchaResponse, $recaptchaSecretKey, $scoreThreshold = 0.5)
+{
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $recaptchaSecretKey,
+        'response' => $recaptchaResponse
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $response = json_decode($result);
+
+    if ($response && isset($response->success) && $response->success) {
+        return 1; // Verification successful
+    }
+
+    return 0; // Verification failed
 }

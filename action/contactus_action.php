@@ -4,7 +4,9 @@ include('mailer.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     if (!isset($_POST['g-recaptcha-response'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - contact us form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
     $captcha = $_POST['g-recaptcha-response'];
     $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
@@ -13,11 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
     $response = file_get_contents($url);
     $responseKeys = json_decode($response, true);
+    // echo "<pre>";print_r($responseKeys);exit;
     // should return JSON with success as true
-    if ($responseKeys["success"]) {
-        // echo '<h2>Thanks for posting comment</h2>';
-    } else {
+    if (isset($responseKeys['error-codes']) && !empty($responseKeys['error-codes'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - contact us form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
+    }
+
+    $captchaToken = $_POST['g-recaptcha-response'];
+    $result = validateRecaptcha($captchaToken);
+    if ($result === 0) {
+        // Recaptcha verification failed
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - contact us form' . '[recaptcha validateRecaptcha error]' . $logData, FILE_APPEND);
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
 
     $name = senatize_post_input($_POST['name'], 'string');
@@ -114,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
                         <br><br>
                         Team<br>
                         Lineomatic';
-        $mail = sendMailSMTP('Contact us form submitted | lineomatic', 'info@lineomatic.com', $bodyHTML);
+        // $mail = sendMailSMTP('Contact us form submitted | lineomatic', 'info@lineomatic.com', $bodyHTML);
 
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
             <br>
@@ -129,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Team<br>
             Lineomatic
             ';
-        $mail = sendMailSMTP('Thanks for contacting lineomatic', $email, $bodyHTML);
+        // $mail = sendMailSMTP('Thanks for contacting lineomatic', $email, $bodyHTML);
 
         if (!isset($mail['error'])) {
             $_SESSION['success_msg'] = "Your message submitted successfully.";
@@ -155,4 +167,38 @@ function senatize_post_input($data, $type)
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
     }
+}
+
+function validateRecaptcha($response, $scoreThreshold = 0.5)
+{
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => '6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI',
+        'response' => $response
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $response = json_decode($result);
+
+    // echo '<pre>';
+    // print_r( $response);
+    // print_r( $_REQUEST);
+    // echo '</pre>';
+
+    file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . ']' . '[recaptcha response]' . print_r($response, true), FILE_APPEND);
+
+    if ($response && isset($response->success) && $response->success === 1) { //&& $response->score >= $scoreThreshold
+        return 1; // Verification successful
+    }
+
+    return 0; // Verification failed
 }

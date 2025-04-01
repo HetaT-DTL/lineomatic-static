@@ -4,7 +4,9 @@ include('mailer.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     if (!isset($_POST['g-recaptcha-response'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - career form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
     $captcha = $_POST['g-recaptcha-response'];
     $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
@@ -13,11 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
     $response = file_get_contents($url);
     $responseKeys = json_decode($response, true);
+    // echo "<pre>";print_r($responseKeys);exit;
     // should return JSON with success as true
-    if ($responseKeys["success"]) {
-        // echo '<h2>Thanks for posting comment</h2>';
-    } else {
+    if (isset($responseKeys['error-codes']) && !empty($responseKeys['error-codes'])) {
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - career form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
         header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
+    }
+
+    $captchaToken = $_POST['g-recaptcha-response'];
+    $result = validateRecaptcha($captchaToken);
+    if ($result === 0) {
+        // Recaptcha verification failed
+        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - career form' . '[recaptcha validateRecaptcha error]' . $logData, FILE_APPEND);
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     }
 
     $job_post = senatize_post_input($_POST['job_post'], 'string');
