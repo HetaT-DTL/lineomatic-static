@@ -3,6 +3,23 @@ include('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
+    if (!isset($_POST['g-recaptcha-response'])) {
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+    }
+    $captcha = $_POST['g-recaptcha-response'];
+    $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+    $response = file_get_contents($url);
+    $responseKeys = json_decode($response, true);
+    // should return JSON with success as true
+    if ($responseKeys["success"]) {
+        // echo '<h2>Thanks for posting comment</h2>';
+    } else {
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+    }
+
     $job_post = senatize_post_input($_POST['job_post'], 'string');
     $fname = senatize_post_input(($_POST['fname']), 'string');
     $lname = senatize_post_input(($_POST['lname']), 'string');
@@ -197,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Team<br>
             Lineomatic';
 
-        $mail = sendMailSMTP('New career request', 'info@lineomatic.com', $bodyHTML); 
+        $mail = sendMailSMTP('New career request', 'info@lineomatic.com', $bodyHTML);  
 
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
             <br>

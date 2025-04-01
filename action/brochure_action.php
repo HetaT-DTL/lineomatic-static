@@ -2,7 +2,23 @@
 include('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
-    // echo "<pre>";print($_POST['name']);exit;
+
+    if (!isset($_POST['g-recaptcha-response'])) {
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+    }
+    $captcha = $_POST['g-recaptcha-response'];
+    $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
+    $response = file_get_contents($url);
+    $responseKeys = json_decode($response, true);
+    // should return JSON with success as true
+    if ($responseKeys["success"]) {
+        // echo '<h2>Thanks for posting comment</h2>';
+    } else {
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+    }
 
 
     $name = senatize_post_input($_POST['name'], 'string');
