@@ -4,7 +4,7 @@ include('mailer.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
     if (!isset($_POST['g-recaptcha-response'])) {
-        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - exhibition form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
+        customAddLog("Error - [recaptcha g-recaptcha-response empty]", print_r($_POST, true));
         header("Location: " . $_POST['redirect_url'] . "?error=1");
         exit;
     }
@@ -15,10 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
     $response = file_get_contents($url);
     $responseKeys = json_decode($response, true);
-    // echo "<pre>";print_r($responseKeys);exit;
     // should return JSON with success as true
     if (isset($responseKeys['error-codes']) && !empty($responseKeys['error-codes'])) {
-        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - exhibition form' . '[recaptcha g-recaptcha-response empty]' . $_POST, FILE_APPEND);
+        customAddLog("Error - [recaptcha error-codes set]", print_r($_POST, true));
         header("Location: " . $_POST['redirect_url'] . "?error=1");
         exit;
     }
@@ -27,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     $result = validateRecaptcha($captchaToken);
     if ($result === 0) {
         // Recaptcha verification failed
-        file_put_contents("text-files/log_broucher.txt", '[' . date('d-m-Y H:i A') . '] - exhibition form' . '[recaptcha validateRecaptcha error]' . $logData, FILE_APPEND);
+        customAddLog("Error - [recaptcha validateRecaptcha error]", print_r($_POST, true));
         header("Location: " . $_POST['redirect_url'] . "?error=1");
         exit;
     }
@@ -53,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
 
     if (empty($exhibition) && empty($company_name) && empty($first_name) && empty($last_name) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($code) && empty($phone) && empty($mobile) && empty($email) && empty($date) && empty($interested_products) && empty($message)) {
+        customAddLog("Error - [On php side input validation er]", print_r($_POST, true));
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
     } else {
         $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
@@ -77,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
         $file = "text-files/exhibition_details.txt";
         file_put_contents($file, $data, FILE_APPEND);
-
+        customAddLog("Success - [After file_put_contents]", print_r($data, true));
+        
         $bodyHTML = '<img src ="https://www.lineomatic.com/assets/images/inner-page-logo.png">
             <br>
             <br>
@@ -185,7 +186,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
             Lineomatic
             ';
         $mail = sendMailSMTP('Thank you for pre-registring your visit', $email, $bodyHTML);
-
+        customAddLog("Success - [After sendMailSMTP]", print_r($data, true));
+        
         $_SESSION['success_msg'] = "Your message submitted successfully.";
         header("Location: " . $_POST['redirect_url'] . "?success=1");
     }
@@ -205,4 +207,67 @@ function senatize_post_input($data, $type)
         $data = preg_replace('/[$&;#|<>.^*%!]/', ' ', $data);
         return $data;
     }
+}
+
+function validateRecaptcha($response, $scoreThreshold = 0.5)
+{
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => '6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI',
+        'response' => $response
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $response = json_decode($result);
+
+    customAddLog('[' . date('d-m-Y H:i A') . ']' . '[recaptcha response validateRecaptcha >>]', print_r($response, true));
+
+    if ($response && isset($response->success) && $response->success === 1) { //&& $response->score >= $scoreThreshold
+        return 1; // Verification successful
+    }
+
+    return 0; // Verification failed
+}
+
+$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No referer';
+// Get all request headers
+$headers = getallheaders();
+// Capture request data
+$request_data = [
+    'GET' => $_GET,
+    'POST' => $_POST,
+    'REQUEST' => $_REQUEST,
+    'FILES' => $_FILES,
+    'SERVER' => $_SERVER
+];
+$logEntry .= "HTTP_REFERER: " . $referer . "\n";
+$logEntry .= "HEADERS: " . print_r($headers, true) . "\n";
+$logEntry .= "REQUEST DATA: " . print_r($request_data, true) . "\n\n";
+
+customAddLog("[Request headers]", $logEntry);
+
+function customAddLog($logType, $logData)
+{
+    $baseLogDir = '/home/lineomat/lineomatic_logs';
+    $todayFolder = date('Y-m-d');
+    $logDir = "{$baseLogDir}/{$todayFolder}";
+    $logFile = "{$logDir}/{$todayFolder}_exhibition_log.txt";
+
+    if (!file_exists($logDir)) {
+        mkdir($logDir, 0750, true);
+    }
+
+    // $time = date('Y-m-d H:i:s');
+    $logEntry = '[' . date('d-m-Y H:i A') . ']' . '[' . $logType . ']' . $logData;
+
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
 }
