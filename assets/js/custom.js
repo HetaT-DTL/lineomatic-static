@@ -524,6 +524,19 @@ $(document).ready(function () {
 $(document).ready(function () {
 	//console.log('i am in ready');
 	//$(".poup_modal_show .popup_modal-content").fadeIn(1000);
+
+	$("#exhibition").validate({
+		rules: {
+			'g-recaptcha-response': {
+        	    required: true,
+        	},
+		},
+	});
+
+	$(document).on('submit','#request-quote-form, #brochure-requst, #career, #contact-form, #exhibition',function(){
+		var submitButton = $(this).find('input[type="submit"]');
+		submitButton.prop('disabled', true).css('opacity', 0.5);
+	});
 });
 $(".poup_modal_show .model-colse").click(function () {
 	$(".poup_modal_show .popup_modal-content").css("display", "none");
