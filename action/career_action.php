@@ -3,31 +3,8 @@ include('mailer.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
 
-    if (!isset($_POST['g-recaptcha-response'])) {
-        customAddLog("Error - [recaptcha g-recaptcha-response empty]", print_r($_POST, true));
-        header("Location: " . $_POST['redirect_url'] . "?error=1");
-        exit;
-    }
-    $captcha = $_POST['g-recaptcha-response'];
-    $secretKey = "6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI";
-    $ip = $_SERVER['REMOTE_ADDR'];
-
-    $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-    $response = file_get_contents($url);
-    $responseKeys = json_decode($response, true);
-
-    // should return JSON with success as true
-    if (isset($responseKeys['error-codes']) && !empty($responseKeys['error-codes'])) {
-        customAddLog("Error - [recaptcha error-codes set]", print_r($_POST, true));
-        header("Location: " . $_POST['redirect_url'] . "?error=1");
-        exit;
-    }
-
-    $captchaToken = $_POST['g-recaptcha-response'];
-    $result = validateRecaptcha($captchaToken);
-    if ($result === 0) {
-        // Recaptcha verification failed
-        customAddLog("Error - [recaptcha validateRecaptcha error]", print_r($_POST, true));
+    if (!isset($_POST['valid_captcha']) || !isset($_POST['entered_captcha']) || $_POST['valid_captcha'] !== $_POST['entered_captcha']) {
+        customAddLog("Error - [Captcha not matched]", print_r($_POST, true));
         header("Location: " . $_POST['redirect_url'] . "?error=1");
         exit;
     }
