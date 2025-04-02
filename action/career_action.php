@@ -266,6 +266,35 @@ function senatize_post_input($data, $type)
     }
 }
 
+function validateRecaptcha($response, $scoreThreshold = 0.5)
+{
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => '6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI',
+        'response' => $response
+    ];
+
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+
+    $context  = stream_context_create($options);
+    $result = file_get_contents($url, false, $context);
+    $response = json_decode($result);
+
+    customAddLog('[' . date('d-m-Y H:i A') . ']' . '[recaptcha response validateRecaptcha >>]' , print_r($response, true));
+
+    if ($response && isset($response->success) && $response->success === 1) { //&& $response->score >= $scoreThreshold
+        return 1; // Verification successful
+    }
+
+    return 0; // Verification failed
+}
+
 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No referer';
 // Get all request headers
 $headers = getallheaders();
