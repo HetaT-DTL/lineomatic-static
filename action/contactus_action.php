@@ -22,14 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
         exit;
     }
 
-    $captchaToken = $_POST['g-recaptcha-response'];
-    $result = validateRecaptcha($captchaToken);
-    if ($result === 0) {
-        // Recaptcha verification failed
-        customAddLog("Error - [recaptcha validateRecaptcha error]", print_r($_POST, true));
-        header("Location: " . $_POST['redirect_url'] . "?error=1");
-        exit;
-    }
+    // $captchaToken = $_POST['g-recaptcha-response'];
+    // $result = validateRecaptcha($captchaToken);
+    // if ($result === 0) {
+    //     // Recaptcha verification failed
+    //     customAddLog("Error - [recaptcha validateRecaptcha error]", print_r($_POST, true));
+    //     header("Location: " . $_POST['redirect_url'] . "?error=1");
+    //     exit;
+    // }
 
     $name = senatize_post_input($_POST['name'], 'string');
     $company_name = senatize_post_input(($_POST['company_name']), 'string');
@@ -172,34 +172,34 @@ function senatize_post_input($data, $type)
     }
 }
 
-function validateRecaptcha($response, $scoreThreshold = 0.5)
-{
-    $url = 'https://www.google.com/recaptcha/api/siteverify';
-    $data = [
-        'secret' => '6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI',
-        'response' => $response
-    ];
+// function validateRecaptcha($response, $scoreThreshold = 0.5)
+// {
+//     $url = 'https://www.google.com/recaptcha/api/siteverify';
+//     $data = [
+//         'secret' => '6LdMgfoUAAAAAEUgJiTB-Ictrvhb4TbqGSmMM-gI',
+//         'response' => $response
+//     ];
 
-    $options = [
-        'http' => [
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
-            'content' => http_build_query($data)
-        ]
-    ];
+//     $options = [
+//         'http' => [
+//             'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+//             'method'  => 'POST',
+//             'content' => http_build_query($data)
+//         ]
+//     ];
 
-    $context  = stream_context_create($options);
-    $result = file_get_contents($url, false, $context);
-    $response = json_decode($result);
+//     $context  = stream_context_create($options);
+//     $result = file_get_contents($url, false, $context);
+//     $response = json_decode($result);
 
-    customAddLog('[' . date('d-m-Y H:i A') . ']' . '[recaptcha response validateRecaptcha >>]' , print_r($response, true));
+//     customAddLog('[' . date('d-m-Y H:i A') . ']' . '[recaptcha response validateRecaptcha >>]' , print_r($response, true));
 
-    if ($response && isset($response->success) && $response->success === 1) { //&& $response->score >= $scoreThreshold
-        return 1; // Verification successful
-    }
+//     if ($response && isset($response->success) && $response->success === 1) { //&& $response->score >= $scoreThreshold
+//         return 1; // Verification successful
+//     }
 
-    return 0; // Verification failed
-}
+//     return 0; // Verification failed
+// }
 
 $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'No referer';
 // Get all request headers
