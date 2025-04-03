@@ -1,7 +1,7 @@
 <?php
 include('mailer.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!isset($_POST['g-recaptcha-response'])) {
         customAddLog("Error - [recaptcha g-recaptcha-response empty]", print_r($_POST, true));
@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($exhibition) && empty($company_name) && empty($first_name) && empty($last_name) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($code) && empty($phone) && empty($mobile) && empty($email) && empty($date) && empty($interested_products) && empty($message)) {
         customAddLog("Error - [On php side input validation er]", print_r($_POST, true));
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
+        header("Location: " . $_POST['redirect_url'] . "?error=1");
+        exit;
     } else {
         $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
         $data .= "Exhibition: " . $exhibition . "\n";
@@ -193,7 +195,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     }
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
+    customAddLog("Error - [Request post not set]", print_r($_POST, true));
     header("Location: " . $_POST['redirect_url'] . "?error=1");
+    exit;
 }
 
 function senatize_post_input($data, $type)

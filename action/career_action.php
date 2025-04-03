@@ -1,7 +1,7 @@
 <?php
 include('mailer.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!isset($_POST['valid_captcha']) || !isset($_POST['entered_captcha']) || $_POST['valid_captcha'] !== $_POST['entered_captcha']) {
         customAddLog("Error - [Captcha not matched]", print_r($_POST, true));
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     if (empty($job_post) && empty($fname) && empty($lname) && empty($address) && empty($city) && empty($state) && empty($zip) && empty($country) && empty($p_code) && empty($phone) && empty($mobile) && empty($email) && empty($dob) && empty($present_company) && empty($present_job_location) && empty($present_job_description) && empty($notice_period) && empty($present_designation) && empty($qualification) && empty($t_exp) && empty($p_ctc) && empty($post_apply) && empty($e_ctc) && empty($message)) {
         customAddLog("Error - [On php side input validation er]", print_r($_POST, true));
         $_SESSION['error_msg'] = "Something went to wrong, please try again.";
+        exit;
     } else {
         $data = "==================== Date: " . date('d-m-Y h:i A') . " =========================\n";
         $data .= "Job Post: " . $job_post . "\n";
@@ -227,7 +228,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit"])) {
     }
 } else {
     $_SESSION['error_msg'] =  "Something went to wrong, please try again.";
+    customAddLog("Error - [Request post not set]", print_r($_POST, true));
     header("Location: " . $_POST['redirect_url'] . "?error=1");
+    exit;
 }
 
 function senatize_post_input($data, $type)
